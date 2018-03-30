@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Login</string>
+    <string name="reg_name">Registration</string>
+    <string name="base_name">Menu</string>
+    <string name="title_home">Create Tiket</string>
+    <string name="title_dashboard">My Tikets</string>
+    <string name="title_notifications">Users Tikets</string>
+</resources>
