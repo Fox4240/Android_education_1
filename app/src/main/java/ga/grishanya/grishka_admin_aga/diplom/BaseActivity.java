@@ -51,8 +51,6 @@ public class BaseActivity extends Activity {
         SharedPreferences MyPreferences;
         MyPreferences=getSharedPreferences("MyPreferences",Context.MODE_PRIVATE);
         return MyPreferences.getString(Key+"", "");
-
-
     }
 
     @Override

@@ -9,7 +9,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".RetrofitClient"
         android:theme="@style/AppTheme">
+
 
         <activity
             android:name=".MainActivity"
@@ -30,6 +32,7 @@
             android:name=".BaseActivity"
             android:label="@string/base_name">
         </activity>
+
 
     </application>
 
