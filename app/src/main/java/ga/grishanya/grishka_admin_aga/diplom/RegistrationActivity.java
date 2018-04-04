@@ -1,6 +1,5 @@
 package ga.grishanya.grishka_admin_aga.diplom;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -11,16 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -29,8 +23,7 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText regUserLogin;
     EditText regPassword;
     EditText regPasswordConfirm;
-
-    static final String API_URL = "https://grishanya.ga/api/auth/registration/";
+    TextView errorTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +34,53 @@ public class RegistrationActivity extends AppCompatActivity {
         regUserLogin = (EditText) findViewById(R.id.regUserLogin);
         regPassword = (EditText) findViewById(R.id.regPassword);
         regPasswordConfirm=(EditText) findViewById(R.id.regPasswordConfirm);
+        errorTextView=(TextView) findViewById(R.id.errorTextRegistration);
 
         View.OnClickListener oclBtnReg = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendPost();
+
+                loginRequest(regUserLogin.getText().toString()+"",regPassword.getText().toString()+"",regPasswordConfirm.getText().toString()+"");
+
             }
         };
         finishRegistration.setOnClickListener(oclBtnReg);
     }
 
+    public void loginRequest(String username,String password,String confirmPassword){
+        RetrofitClient.getGrishanyaApi().registrationPOSTRequest(username+"", password+"",confirmPassword+"").enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+
+                try{
+                    if(!response.isSuccessful()){errorTextView.setVisibility(View.VISIBLE);}
+
+                    String resp = response.body().getKey();
+                    Log.i("Key",resp + "");
+                    Log.i("WasRegSuccessful",response.isSuccessful()+"");
+
+                    saveText(resp+"","Key");
+
+                    Intent intent = new Intent(RegistrationActivity.this, BaseActivity.class);
+                    startActivity(intent);
+                }
+                catch (NullPointerException e){errorTextView.setVisibility(View.VISIBLE);}
+
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                errorTextView.setVisibility(View.VISIBLE);
+            }
+
+        });
+
+    }
+
     public void ComeBack(View view) {
-        Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-        startActivity(intent);
+
+        finish();
+
     }
 
     public void saveText(String infoForSave,String NameOfSave) {
@@ -63,74 +90,5 @@ public class RegistrationActivity extends AppCompatActivity {
         editor.putString(NameOfSave+"",infoForSave+"" );
         editor.commit();
     }
-
-    public void sendPost() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL("https://grishanya.ga/api/auth/registration/");
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Accept","application/json");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
-
-                    JSONObject jsonParam = new JSONObject();
-                    jsonParam.put("username", regUserLogin.getText().toString()+"");
-                    jsonParam.put("password1", regPassword.getText()+"");
-                    jsonParam.put("password2", regPasswordConfirm.getText()+"");
-
-                    Log.i("JSON", jsonParam.toString());
-                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                    //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
-                    os.writeBytes(jsonParam.toString());
-
-                    os.flush();
-                    os.close();
-
-                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                    Log.i("MSG" , conn.getResponseMessage());
-                    try {
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                        StringBuilder stringBuilder = new StringBuilder();
-                        String line;
-                        while ((line = bufferedReader.readLine()) != null) {
-                            stringBuilder.append(line).append("\n");
-                        }
-                        bufferedReader.close();
-                        Log.i("PostResponse",stringBuilder.toString()) ;//it should be save
-                        String response = stringBuilder.toString();
-                        if(response == "") {
-                            response = "THERE WAS AN ERROR";
-                        }
-                        try{
-                            JSONObject object = (JSONObject) new JSONTokener(response).nextValue();// парсим json
-                            response = object.getString("key");
-                        }
-                        catch(JSONException e){}
-                        Log.i("Key",response);
-
-                        saveText(response+"","Key");
-
-                        Intent intent = new Intent(RegistrationActivity.this, BaseActivity.class);
-                        startActivity(intent);
-
-                    }catch (Exception e){}
-
-                    conn.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-    }
-
-
-
-
-
 
 }

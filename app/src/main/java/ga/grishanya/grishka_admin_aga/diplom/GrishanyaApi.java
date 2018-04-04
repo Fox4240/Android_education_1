@@ -12,5 +12,9 @@ public interface GrishanyaApi {
 
     @POST("auth/login/")
     @FormUrlEncoded
-    Call <LoginResponse> request(@Field("username") String username, @Field("password") String password);
+    Call <LoginResponse> loginPOSTRequest(@Field("username") String username, @Field("password") String password);
+
+    @POST("auth/registration/")
+    @FormUrlEncoded
+    Call <LoginResponse> registrationPOSTRequest(@Field("username") String username, @Field("password1") String password,@Field("password2") String confirmPassword);
 }
