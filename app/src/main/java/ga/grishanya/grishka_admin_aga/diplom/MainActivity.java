@@ -16,7 +16,7 @@ import android.widget.TextView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+//ToDo: Узнать как устанавливать авто отступ
 public class MainActivity extends AppCompatActivity {
 
 Button loginButton;

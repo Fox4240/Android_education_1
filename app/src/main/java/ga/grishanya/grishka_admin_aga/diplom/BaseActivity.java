@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -23,17 +24,15 @@ public class BaseActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            String key=loadRes("Key");
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(key);
+                    mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
-                    saveText("","rememberUser");
                     return true;
             }
             return false;
@@ -50,6 +49,24 @@ public class BaseActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.logout, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id=item.getItemId();
+        switch (id) {
+            case R.id.BaseActivity_logout:
+                saveText("","rememberUser");
+                finish();//ToDo: Нужно чтобы даже если пользователь регистрировался, его все равно возвращало на Логина
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public String loadRes(String Key){
         SharedPreferences MyPreferences;

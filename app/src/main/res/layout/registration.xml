@@ -4,71 +4,81 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/finishRegistrati"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/regPasswordConfirm"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
-        android:text="Finish registration" />
+        android:layout_centerInParent="true">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <EditText
+                android:id="@+id/regUserLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/errorTextRegistration"
+                android:ems="10"
+                android:hint="Username"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/regPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="168dp"
+                android:ems="10"
+                android:hint="Password Confirm"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/regPasswordConfirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/regPassword"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="-168dp"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword" />
+
+            <TextView
+                android:id="@+id/errorTextRegistration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="Error, fix something"
+                android:textColor="@color/errorTextColor"
+                android:textSize="20sp"
+                android:visibility="invisible" />
+
+
+            <Button
+                android:id="@+id/finishRegistrati"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/regPassword"
+                android:layout_centerHorizontal="true"
+                android:text="  Finish registration  " />
+
+        </RelativeLayout>
+    </LinearLayout>
+
 
     <Button
-        android:onClick="ComeBack"
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="18dp"
-        android:layout_marginRight="18dp"
+        android:onClick="ComeBack"
         android:text="I already has account" />
 
-    <EditText
-        android:id="@+id/regUserLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="85dp"
-        android:ems="10"
-        android:hint="Username"
-        android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/regPassword"
-        android:hint="Password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/regPasswordConfirm"
-        android:layout_alignLeft="@+id/regUserLogin"
-        android:layout_alignStart="@+id/regUserLogin"
-        android:layout_marginBottom="12dp"
-        android:ems="10"
-        android:inputType="textPassword" />
-
-    <EditText
-        android:id="@+id/regPasswordConfirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/regPassword"
-        android:layout_alignRight="@+id/regPassword"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:hint="Password Confirm"
-        android:inputType="textPassword" />
-
-    <TextView
-        android:id="@+id/errorTextRegistration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/regUserLogin"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="-85dp"
-        android:text="Error, fix something"
-        android:textColor="@color/errorTextColor"
-        android:textSize="20sp"
-        android:visibility="invisible" />
 </RelativeLayout>
