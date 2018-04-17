@@ -7,9 +7,6 @@ import com.google.gson.annotations.SerializedName;
 public class TicketResponse {
 
 
-    @SerializedName("url")
-    @Expose
-    private String url;
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -34,17 +31,6 @@ public class TicketResponse {
     @SerializedName("responsible")
     @Expose
     private Object responsible;
-    @SerializedName("articles")
-    @Expose
-    private List<String> articles = null;
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public Integer getId() {
         return id;
@@ -108,14 +94,6 @@ public class TicketResponse {
 
     public void setResponsible(Object responsible) {
         this.responsible = responsible;
-    }
-
-    public List<String> getArticles() {
-        return articles;
-    }
-
-    public void setArticles(List<String> articles) {
-        this.articles = articles;
     }
 
 }

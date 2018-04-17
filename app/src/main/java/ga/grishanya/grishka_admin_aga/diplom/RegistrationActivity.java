@@ -23,6 +23,7 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText regUserLogin;
     EditText regPassword;
     EditText regPasswordConfirm;
+    EditText regEmail;
     TextView errorTextView;
 
     @Override
@@ -35,20 +36,20 @@ public class RegistrationActivity extends AppCompatActivity {
         regPassword = (EditText) findViewById(R.id.regPassword);
         regPasswordConfirm=(EditText) findViewById(R.id.regPasswordConfirm);
         errorTextView=(TextView) findViewById(R.id.errorTextRegistration);
+        regEmail=(EditText) findViewById(R.id.editRegEmail);
 
         View.OnClickListener oclBtnReg = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                loginRequest(regUserLogin.getText().toString()+"",regPassword.getText().toString()+"",regPasswordConfirm.getText().toString()+"");
-
+                loginRequest(regUserLogin.getText().toString()+"",regEmail.getText().toString()+"",regPassword.getText().toString()+"",regPasswordConfirm.getText().toString()+"");
             }
         };
         finishRegistration.setOnClickListener(oclBtnReg);
     }
 
-    public void loginRequest(String username,String password,String confirmPassword){
-        RetrofitClient.getGrishanyaApi().registrationPOSTRequest(username+"", password+"",confirmPassword+"").enqueue(new Callback<LoginResponse>() {
+    public void loginRequest(String username,String email,String password,String confirmPassword){
+        RetrofitClient.getGrishanyaApi().registrationPOSTRequest(username+"",email+"", password+"",confirmPassword+"").enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
 

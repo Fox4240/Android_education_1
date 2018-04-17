@@ -31,7 +31,7 @@ CheckBox rememberUser;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_password);
-
+        getSupportActionBar().setTitle(R.string.main_activity_name);
 
         Log.i("knownUser",getLoggedUser()+"");
         if(getLoggedUser()){

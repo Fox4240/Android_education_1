@@ -36,7 +36,7 @@ public class RetrofitClient extends Application {
     }
 
     public static String getKeyToken(){
-        return KeyToken;
+        return KeyToken;//ToDo Придумать, как обновлять по надобности, или где еще можно это хранить  в принципе, можно при создании заливать в саециальный класс, откуда будем получать...Уточнить у макса насколько это плохо!
     }
     public static GrishanyaApi getGrishanyaApi(){
         return grishanyaApi;

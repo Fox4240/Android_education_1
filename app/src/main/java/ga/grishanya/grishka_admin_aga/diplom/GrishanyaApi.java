@@ -19,7 +19,7 @@ public interface GrishanyaApi {
 
     @POST("auth/registration/")
     @FormUrlEncoded
-    Call <LoginResponse> registrationPOSTRequest(@Field("username") String username, @Field("password1") String password,@Field("password2") String confirmPassword);
+    Call <LoginResponse> registrationPOSTRequest(@Field("username") String username,@Field("email") String email, @Field("password1") String password,@Field("password2") String confirmPassword);
 
     @GET("tickets")
     Call <List<TicketResponse>> getTickets(@Header("Authorization") String auth);

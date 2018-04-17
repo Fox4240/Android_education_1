@@ -24,14 +24,20 @@
                 android:ems="10"
                 android:hint="Username"
                 android:inputType="textPersonName" />
-
+            <EditText
+                android:id="@+id/editRegEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/regUserLogin"
+                android:ems="10"
+                android:hint="E-mail"
+                android:inputType="textEmailAddress"
+                />
             <EditText
                 android:id="@+id/regPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="168dp"
+                android:layout_below="@+id/editRegEmail"
                 android:ems="10"
                 android:hint="Password Confirm"
                 android:inputType="textPassword" />
@@ -40,9 +46,7 @@
                 android:id="@+id/regPasswordConfirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/regPassword"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="-168dp"
+                android:layout_below="@+id/regPassword"
                 android:ems="10"
                 android:hint="Password"
                 android:inputType="textPassword" />
@@ -63,8 +67,9 @@
                 android:id="@+id/finishRegistrati"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/regPassword"
+                android:layout_below="@+id/regPasswordConfirm"
                 android:layout_centerHorizontal="true"
+
                 android:text="  Finish registration  " />
 
         </RelativeLayout>

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +31,7 @@ public class BaseActivity extends AppCompatActivity {
 
     RecyclerView ticketsList;
     TicketsListAdapter mTicketsListAdapter;
-
+    static String Key;//ToDo убрать этот дурацкий костыль
     private TextView mTextMessage;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -62,26 +65,37 @@ public class BaseActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        Key=loadRes("Key");
 
         //список тикетов
-// ТРЕБУЕТСЯ ПЕРЕПИСАТь******
         ticketsList=(RecyclerView) findViewById(R.id.ticketsList);
 
-        mTicketsListAdapter=new TicketsListAdapter(new ArrayList<TicketResponse>(0));
+        mTicketsListAdapter=new TicketsListAdapter(new ArrayList<TicketResponse>(0),new TicketsListAdapter.PostTicketListener(){
+
+            @Override
+            public void onPostLongClick(String dateOfCreation, String owner, String priority) {
+
+                Toast.makeText(BaseActivity.this,"Post created time is "+dateOfCreation+"\n"+"Post Owner "+owner+"\n"+"Post priority "+priority,Toast.LENGTH_SHORT).show();
+            }
+        });
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(this);
         ticketsList.setLayoutManager(layoutManager);
         ticketsList.setAdapter(mTicketsListAdapter);
-// ТРЕБУЕТСЯ ПЕРЕПИСАТь******
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        ticketsList.addItemDecoration(itemDecoration);
+
     }
 
     public void getUserTicket(){
-       RetrofitClient.getGrishanyaApi().getTickets("Token "+RetrofitClient.getKeyToken()).enqueue(new Callback<List<TicketResponse>>() {
+       RetrofitClient.getGrishanyaApi().getTickets("Token "+Key).enqueue(new Callback<List<TicketResponse>>() {//ToDo убрать этот дурацкий костыль
            @Override
            public void onResponse(Call<List<TicketResponse>> call, Response<List<TicketResponse>> response) {
                if(response.isSuccessful()){
+
                    Log.i("TicketsList","download");
-                   mTicketsListAdapter=new TicketsListAdapter(response.body());
-                   ticketsList.setAdapter(mTicketsListAdapter);
+                   mTicketsListAdapter.updateTickets(response.body());
+                   try{if(response.body().isEmpty()){mTextMessage.setText("Now your tickets list is empty");}}
+                   catch (NullPointerException e){}
                }
                Log.i("TicketsList",response.code()+"");
            }
