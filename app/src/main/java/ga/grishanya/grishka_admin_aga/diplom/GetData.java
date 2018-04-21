@@ -22,7 +22,7 @@ public class GetData {
     public static String getData(String date){
         Date OldDate=getDataFromString(date);
         String NewDate=null;
-        SimpleDateFormat sdf=new SimpleDateFormat("MMM-dd ' 'HH:mm",Locale.getDefault());
+        SimpleDateFormat sdf=new SimpleDateFormat("dd MMM ' 'HH:mm",Locale.getDefault());
         try{NewDate=sdf.format(OldDate);}
         catch(Exception e){}
         return NewDate;

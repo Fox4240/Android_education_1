@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,13 @@ public class BaseActivity extends AppCompatActivity {
 
     RecyclerView ticketsList;
     TicketsListAdapter mTicketsListAdapter;
+
+    //Первое меню
+    Button sendTicket;
+    EditText nameOfTicket;
+    EditText subjectOfTicket;
+    EditText discriptionOfTicket;
+
     static String Key;//ToDo убрать этот дурацкий костыль
     private TextView mTextMessage;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -40,17 +49,20 @@ public class BaseActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    showInputMyticket();
                     mTextMessage.setText(R.string.title_home);
                     ticketsList.setVisibility(View.GONE);
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_dashboard);
+                    hideInputMyTicket();
                     ticketsList.setVisibility(View.VISIBLE);
                     getUserTicket();
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
                     ticketsList.setVisibility(View.GONE);
+                    hideInputMyTicket();
                     return true;
             }
             return false;
@@ -66,6 +78,12 @@ public class BaseActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Key=loadRes("Key");
+
+        sendTicket=(Button) findViewById(R.id.sendTicket);
+        nameOfTicket=(EditText) findViewById(R.id.NameOfTicket);
+        subjectOfTicket=(EditText) findViewById(R.id.subjectOfTicket);
+        discriptionOfTicket=(EditText) findViewById(R.id.discriptionOfTicket);
+
 
         //список тикетов
         ticketsList=(RecyclerView) findViewById(R.id.ticketsList);
@@ -107,13 +125,49 @@ public class BaseActivity extends AppCompatActivity {
        });
     }
 
+    public void ticketSend (String ticketTitle,String ticketSubject, String ticketDiscription){
 
+        TicketRequest ticketRequest = new TicketRequest(ticketTitle+"",ticketSubject+"",ticketDiscription+"");
+        RetrofitClient.getGrishanyaApi().sendTicket("Token "+Key,ticketRequest).enqueue(new Callback<TicketSendResponse>() {
+            @Override
+            public void onResponse(Call<TicketSendResponse> call, Response<TicketSendResponse> response) {
+                Log.i("TicketSend", response.code()+"");
+                if(response.isSuccessful()){mTextMessage.setText("Ticket was sent succesful!");
+                nameOfTicket.setText("");
+                subjectOfTicket.setText("");
+                discriptionOfTicket.setText("");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TicketSendResponse> call, Throwable t) {
+                Log.i("TicketSend","failed");
+                mTextMessage.setText("Error!");
+            }
+
+        });
+    }
 
     @Override//Меню в правом верхнем углу
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.logout, menu);
         return true;
     }
+
+    public void hideInputMyTicket(){
+        sendTicket.setVisibility(View.GONE);
+        nameOfTicket.setVisibility(View.GONE);
+        discriptionOfTicket.setVisibility(View.GONE);
+        subjectOfTicket.setVisibility(View.GONE);
+    }
+
+    public void showInputMyticket(){
+        sendTicket.setVisibility(View.VISIBLE);
+        nameOfTicket.setVisibility(View.VISIBLE);
+        discriptionOfTicket.setVisibility(View.VISIBLE);
+        subjectOfTicket.setVisibility(View.VISIBLE);
+    }
+
 
     @Override//Меню в правом верхнем углу
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -145,5 +199,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override//завершение работы приложения при нажатии клавиши назад
     public void onBackPressed() {
         finishAffinity();
+    }
+
+    public void sendTiketButtonClick(View view) {
+        ticketSend(nameOfTicket.getText()+"",subjectOfTicket.getText()+"",discriptionOfTicket.getText()+"");
     }
 }

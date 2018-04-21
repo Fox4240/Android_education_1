@@ -17,6 +17,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 //ToDo: Узнать как устанавливать авто отступ
+//ToDo: Заполнение профиля после регистрации
+//ToDo: Cмену пароля туда же
 public class MainActivity extends AppCompatActivity {
 
 Button loginButton;
@@ -39,13 +41,11 @@ CheckBox rememberUser;
             startActivity(intent);
         }
 
-        rememberUser=(CheckBox) findViewById(R.id.rememberLogin);
+        rememberUser=(CheckBox) findViewById(R.id.rememberLogin);//ToDo добавить чек при переходе в след. окно
         editLogin=(EditText) findViewById(R.id.editLogin);
         loginButton=(Button) findViewById(R.id.loginButton);
         editPassword=(EditText) findViewById(R.id.editPassword);
         errorTextView=(TextView) findViewById(R.id.errorText);
-
-
 
         View.OnClickListener oclBtnTransl = new View.OnClickListener() {
             @Override
@@ -64,37 +64,37 @@ CheckBox rememberUser;
 
     }
 
-
-
-
     public void loginRequest(String username,String password){
-        RetrofitClient.getGrishanyaApi().loginPOSTRequest(username+"", password+"").enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                    Log.i("Sucess","s");
-                try{
-                    if(!response.isSuccessful()){errorTextView.setVisibility(View.VISIBLE);}
 
-                    String resp = response.body().getKey();
-                    Log.i("Key",resp + "");
-                    Log.i("WasLoginSuccessful",response.isSuccessful()+"");
+            RetrofitClient.getGrishanyaApi().loginPOSTRequest(username + "", password + "").enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    Log.i("Sucess", "s");
+                    try {
+                        if (!response.isSuccessful()) {
+                            errorTextView.setVisibility(View.VISIBLE);
+                        }
 
-                    saveText(resp+"","Key");
+                        String resp = response.body().getKey();
+                        Log.i("Key", resp + "");
+                        Log.i("WasLoginSuccessful", response.isSuccessful() + "");
 
-                    Intent intent = new Intent(MainActivity.this, BaseActivity.class);
-                    startActivity(intent);
+                        saveText(resp + "", "Key");
+
+                        Intent intent = new Intent(MainActivity.this, BaseActivity.class);
+                        startActivity(intent);
+                    } catch (NullPointerException e) {
+                        errorTextView.setVisibility(View.VISIBLE);
+                    }
+
                 }
-                catch (NullPointerException e){errorTextView.setVisibility(View.VISIBLE);}
 
-            }
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    errorTextView.setVisibility(View.VISIBLE);
+                }
 
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                errorTextView.setVisibility(View.VISIBLE);
-            }
-
-        });
-
+            });
     }
 
     public Boolean getLoggedUser(){
@@ -120,5 +120,6 @@ CheckBox rememberUser;
         editor.putString(NameOfSave+"",infoForSave+"" );
         editor.commit();
     }
+
 
 }

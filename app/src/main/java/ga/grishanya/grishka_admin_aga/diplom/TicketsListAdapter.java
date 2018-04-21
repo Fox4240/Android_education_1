@@ -75,7 +75,7 @@ public class TicketsListAdapter extends RecyclerView.Adapter<TicketsListAdapter.
         TextView textView = holder.titleTicket;
         TextView ticOwner = holder.ownerTicket;
         TextView ticData = holder.dataTicket;
-        textView.setText("Name: "+ticketResponse.getTitle());
+        textView.setText("Title: "+ticketResponse.getTitle());
         ticOwner.setText("Owner: "+ticketResponse.getOwner());
         ticData.setText("Created at: "+GetData.getData(ticketResponse.getCreatedAt()));
     }
